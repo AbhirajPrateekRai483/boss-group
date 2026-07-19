@@ -1,62 +1,22 @@
-const menuBtn = document.getElementById("menuBtn");
-const navLinks = document.querySelector(".nav-links");
+document.addEventListener('DOMContentLoaded', () => {
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
 
-if (menuBtn && navLinks) {
+    if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => {
+            const isExpanded = menuBtn.getAttribute('aria-expanded') === 'true';
+            menuBtn.setAttribute('aria-expanded', !isExpanded);
+            mobileMenu.classList.toggle('active');
+            menuBtn.innerHTML = mobileMenu.classList.contains('active') ? '✕' : '☰';
+        });
 
-menuBtn.addEventListener("click", () => {
-
-navLinks.classList.toggle("show");
-
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target) && mobileMenu.classList.contains('active')) {
+                mobileMenu.classList.remove('active');
+                menuBtn.setAttribute('aria-expanded', 'false');
+                menuBtn.innerHTML = '☰';
+            }
+        });
+    }
 });
 
-}
-
-const links = document.querySelectorAll(".nav-links a");
-
-const currentPage = window.location.pathname.split("/").pop() || "index.html";
-
-links.forEach(link => {
-
-const href = link.getAttribute("href");
-
-if (href === currentPage) {
-
-link.classList.add("active");
-
-}
-
-});
-
-const revealElements = document.querySelectorAll(".coming-card, .vision-card");
-
-const observer = new IntersectionObserver((entries) => {
-
-entries.forEach(entry => {
-
-if (entry.isIntersecting) {
-
-entry.target.style.opacity = "1";
-
-entry.target.style.transform = "translateY(0)";
-
-}
-
-});
-
-}, {
-
-threshold: 0.2
-
-});
-
-revealElements.forEach(element => {
-
-element.style.opacity = "0";
-
-element.style.transform = "translateY(40px)";
-
-element.style.transition = "all .7s ease";
-
-observer.observe(element);
-
-});
