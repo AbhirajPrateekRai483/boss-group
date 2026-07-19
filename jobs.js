@@ -1,58 +1,22 @@
-const menuBtn = document.getElementById("menuBtn");
+document.addEventListener('DOMContentLoaded', () => {
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
 
-const navLinks = document.querySelector(".nav-links");
+    if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => {
+            const isExpanded = menuBtn.getAttribute('aria-expanded') === 'true';
+            menuBtn.setAttribute('aria-expanded', !isExpanded);
+            mobileMenu.classList.toggle('active');
+            menuBtn.innerHTML = mobileMenu.classList.contains('active') ? '✕' : '☰';
+        });
 
-
-if(menuBtn && navLinks){
-
-menuBtn.addEventListener("click",()=>{
-
-navLinks.classList.toggle("show");
-
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target) && mobileMenu.classList.contains('active')) {
+                mobileMenu.classList.remove('active');
+                menuBtn.setAttribute('aria-expanded', 'false');
+                menuBtn.innerHTML = '☰';
+            }
+        });
+    }
 });
 
-}
-
-
-const currentPage = window.location.pathname.split("/").pop();
-
-
-document.querySelectorAll(".nav-links a").forEach(link=>{
-
-if(link.getAttribute("href") === currentPage){
-
-link.classList.add("active");
-
-}
-
-});
-
-
-const elements = document.querySelectorAll(
-".coming-card, .vision-card"
-);
-
-
-const observer = new IntersectionObserver((entries)=>{
-
-entries.forEach(entry=>{
-
-if(entry.isIntersecting){
-
-entry.target.classList.add("show");
-
-}
-
-});
-
-},{
-threshold:0.2
-
-});
-
-
-elements.forEach(element=>{
-
-observer.observe(element);
-
-});
